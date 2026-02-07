@@ -1,55 +1,246 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+<!--
+Sync Impact Report:
+Version: NEW → 1.0.0
+Rationale: Initial constitution for Todo Full-Stack Web Application project
+Modified Principles: N/A (new constitution)
+Added Sections:
+  - Core Principles (6 principles)
+  - Technology Stack
+  - Security Requirements
+  - Development Workflow
+  - Governance
+Removed Sections: N/A
+Templates Status:
+  - ✅ .specify/templates/plan-template.md (to be validated)
+  - ✅ .specify/templates/spec-template.md (to be validated)
+  - ✅ .specify/templates/tasks-template.md (to be validated)
+Follow-up TODOs: None
+-->
+
+# Todo Full-Stack Web Application Constitution
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### I. Spec-First Development
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+All behavior MUST be defined in written specifications before any implementation begins.
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+**Rules:**
+- Every feature requires a complete spec document before planning or coding
+- Specs MUST include acceptance criteria, API contracts, and data models
+- No implementation may proceed without an approved spec
+- Changes to behavior require spec amendments first
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+**Rationale:** Spec-first development ensures clarity, prevents scope creep, enables
+traceability, and provides a single source of truth for all stakeholders including
+judges and reviewers.
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### II. Security by Default
 
-### [PRINCIPLE_6_NAME]
+Authentication and authorization MUST be enforced at every layer of the application.
 
+**Rules:**
+- All API endpoints MUST require valid JWT authentication
+- JWT tokens MUST be verified server-side using a shared secret
+- User identity MUST be extracted from JWT, never from request body
+- URL user_id parameters MUST match authenticated user_id
+- Requests without valid tokens MUST return 401 Unauthorized
+- Token expiration MUST be respected and enforced
+- No frontend or backend logic may bypass authentication checks
 
-[PRINCIPLE__DESCRIPTION]
+**Rationale:** Security by default prevents data breaches, ensures compliance with
+privacy requirements, and builds trust. Authentication must be non-negotiable and
+enforced at the infrastructure level, not as an afterthought.
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+### III. User Data Isolation
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+Users MUST only access their own data; cross-user data access is strictly prohibited.
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+**Rules:**
+- Task ownership MUST be enforced at the database query level
+- All queries MUST filter by authenticated user_id
+- Database models MUST include user_id foreign keys
+- API responses MUST only contain data belonging to the authenticated user
+- No shared or public tasks allowed in basic implementation
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+**Rationale:** User data isolation is a fundamental privacy and security requirement.
+Enforcing isolation at the database layer prevents bugs, misconfigurations, or
+malicious attempts from exposing user data.
+
+### IV. Reproducibility
+
+Every feature MUST be traceable to written artifacts and reproducible by others.
+
+**Rules:**
+- All features MUST have corresponding spec, plan, and task documents
+- All implementation decisions MUST be documented in ADRs when architecturally significant
+- All user interactions MUST be recorded in PHRs (Prompt History Records)
+- Generated code MUST be clean, readable, and maintainable
+- Project structure MUST follow Spec-Kit Plus conventions
+
+**Rationale:** Reproducibility enables review, audit, learning, and handoff. The project
+must be judge-ready, meaning any reviewer can understand what was built, why, and how,
+by reading the artifacts.
+
+### V. Automation-First
+
+All implementation MUST be generated by Claude Code agents; manual coding is prohibited.
+
+**Rules:**
+- No manual code writing allowed
+- All code MUST be generated through Claude Code specialized agents
+- Agent selection MUST match domain expertise:
+  - `auth-security-handler` for authentication
+  - `nextjs-ui-builder` for frontend
+  - `neon-db-manager` for database
+  - `fastapi-backend-dev` for backend API
+- Workflow MUST follow: Spec → Plan → Tasks → Implement
+- All agent interactions MUST be documented
+
+**Rationale:** Automation-first demonstrates the power of agentic development, ensures
+consistency, reduces human error, and validates the Spec-Kit Plus methodology for
+real-world projects.
+
+### VI. Production Realism
+
+The application MUST use production-grade technologies and patterns, not toy implementations.
+
+**Rules:**
+- Real database: Neon Serverless PostgreSQL (not in-memory or SQLite)
+- Real authentication: Better Auth with JWT (not hardcoded users)
+- Real API: FastAPI with proper REST conventions (not mock endpoints)
+- Real frontend: Next.js 16+ App Router (not static HTML)
+- Proper error handling with HTTP status codes (401, 403, 404, 422, 500)
+- Environment-based configuration (`.env` files, no hardcoded secrets)
+
+**Rationale:** Production realism ensures the project demonstrates real-world skills,
+not just academic exercises. The application should be deployable and maintainable,
+showcasing industry-standard practices.
+
+## Technology Stack
+
+**Mandatory Technologies:**
+
+| Layer | Technology | Version/Constraint |
+|-------|-----------|-------------------|
+| Frontend | Next.js | 16+ (App Router) |
+| Backend | Python FastAPI | Latest stable |
+| ORM | SQLModel | Latest stable |
+| Database | Neon Serverless PostgreSQL | Cloud-hosted |
+| Authentication | Better Auth | JWT-based |
+| Spec System | Spec-Kit Plus | Latest |
+
+**Technology Constraints:**
+- Frontend and backend MUST be separate services
+- API communication MUST use REST over HTTP
+- Database MUST be Neon PostgreSQL (no substitutions)
+- Authentication MUST use Better Auth (no custom auth)
+- All dependencies MUST be declared in package.json / requirements.txt
+
+**Rationale:** Standardizing the technology stack ensures consistency, enables agent
+specialization, and demonstrates proficiency with modern, industry-relevant tools.
+
+## Security Requirements
+
+**Authentication Flow:**
+
+1. User logs in on Next.js frontend
+2. Better Auth validates credentials and issues JWT token
+3. Frontend includes token in `Authorization: Bearer <token>` header for all API calls
+4. FastAPI backend extracts and verifies JWT signature using shared secret
+5. Backend decodes token to extract user_id
+6. Backend filters all queries by authenticated user_id
+
+**Security Standards:**
+- JWT secret keys MUST be stored in `.env` files, never hardcoded
+- Token verification MUST happen on every protected endpoint
+- User identity MUST come from verified JWT, not request parameters
+- Failed authentication MUST return 401 Unauthorized
+- Authorization failures MUST return 403 Forbidden
+- HTTPS MUST be used in production environments
+
+**Prohibited Practices:**
+- Trusting user_id from request body or URL without JWT verification
+- Bypassing authentication for "convenience" during development
+- Storing passwords in plain text
+- Exposing JWT secrets in code or logs
+- Allowing unauthenticated access to any user data
+
+## Development Workflow
+
+**Mandatory Workflow Stages:**
+
+1. **Specification** (`/sp.specify`)
+   - Define feature requirements clearly
+   - Include acceptance criteria
+   - Specify API contracts and data models
+   - Get user approval before proceeding
+
+2. **Planning** (`/sp.plan`)
+   - Use appropriate specialized agent based on domain
+   - Generate architectural plan
+   - Identify dependencies and risks
+   - Document significant decisions
+
+3. **Task Breakdown** (`/sp.tasks`)
+   - Break plan into testable, atomic tasks
+   - Assign tasks to appropriate agents
+   - Define acceptance criteria for each task
+   - Order tasks by dependencies
+
+4. **Implementation** (`/sp.implement`)
+   - Execute tasks using assigned agents
+   - Follow TDD approach where applicable
+   - Create PHRs for each implementation session
+   - Validate against acceptance criteria
+
+5. **Validation**
+   - Test all endpoints with valid and invalid tokens
+   - Verify authentication flow end-to-end
+   - Check database queries for proper user filtering
+   - Validate frontend functionality and responsiveness
+
+**Agent Coordination:**
+
+For features spanning multiple domains, follow this order:
+1. Database schema (`neon-db-manager`)
+2. Backend API (`fastapi-backend-dev`)
+3. Authentication layer (`auth-security-handler`)
+4. Frontend UI (`nextjs-ui-builder`)
+
+**Quality Gates:**
+- No task may be marked complete without passing acceptance criteria
+- No feature may be merged without complete documentation trail
+- No code may be deployed without authentication verification
+- No manual code edits allowed (automation-first principle)
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+**Amendment Process:**
+- Constitution amendments require explicit user approval
+- Version bumps follow semantic versioning:
+  - MAJOR: Backward-incompatible principle changes
+  - MINOR: New principles or sections added
+  - PATCH: Clarifications, typo fixes, non-semantic changes
+- All amendments MUST update dependent templates and documentation
+- Amendment rationale MUST be documented in Sync Impact Report
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+**Compliance Verification:**
+- All specs MUST reference applicable constitutional principles
+- All plans MUST include constitution compliance checks
+- All tasks MUST align with principle-driven requirements
+- All PRs/reviews MUST verify constitutional compliance
+
+**Enforcement:**
+- Violations of security principles are blocking issues
+- Violations of automation-first principle invalidate the project
+- Violations of spec-first principle require rollback and re-specification
+- Violations of other principles require documented justification and remediation plan
+
+**Living Document:**
+- This constitution is the authoritative source for project standards
+- When conflicts arise between constitution and other docs, constitution prevails
+- Constitution should be consulted before making any architectural decisions
+- Constitution should be updated when new patterns or constraints emerge
+
+**Version**: 1.0.0 | **Ratified**: 2026-02-06 | **Last Amended**: 2026-02-06

@@ -1,0 +1,186 @@
+'use client';
+
+import { useState, useEffect } from 'react';
+import { useAuth } from '@/lib/auth/context';
+import { Task, UpdateTaskData } from '@/types';
+import { getTasks, createTask, updateTask, deleteTask } from '@/lib/api/tasks';
+import { getErrorMessage, handleApiError } from '@/lib/utils/errors';
+import TaskForm from '@/components/tasks/TaskForm';
+import TaskList from '@/components/tasks/TaskList';
+
+/**
+ * Dashboard Page
+ * Main application page for task management
+ */
+export default function DashboardPage() {
+  const { user, signout } = useAuth();
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [createLoading, setCreateLoading] = useState(false);
+  const [createError, setCreateError] = useState<string | null>(null);
+
+  /**
+   * Fetch tasks on mount
+   */
+  useEffect(() => {
+    fetchTasks();
+  }, []);
+
+  /**
+   * Fetch all tasks
+   */
+  const fetchTasks = async () => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const fetchedTasks = await getTasks();
+      setTasks(fetchedTasks);
+    } catch (err) {
+      const errorResult = handleApiError(err);
+      setError(errorResult.message);
+
+      // Redirect if unauthorized
+      if (errorResult.shouldRedirect) {
+        signout();
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  /**
+   * Create a new task
+   */
+  const handleCreateTask = async (data: { title: string }) => {
+    setCreateLoading(true);
+    setCreateError(null);
+
+    try {
+      const newTask = await createTask(data);
+      // Add to list immediately (optimistic update)
+      setTasks((prev) => [newTask, ...prev]);
+    } catch (err) {
+      const errorResult = handleApiError(err);
+      setCreateError(errorResult.message);
+
+      // Redirect if unauthorized
+      if (errorResult.shouldRedirect) {
+        signout();
+      }
+
+      throw err; // Re-throw to prevent form reset
+    } finally {
+      setCreateLoading(false);
+    }
+  };
+
+  /**
+   * Update a task
+   */
+  const handleUpdateTask = async (id: number, data: UpdateTaskData) => {
+    // Optimistic update
+    const previousTasks = [...tasks];
+    setTasks((prev) =>
+      prev.map((task) =>
+        task.id === id ? { ...task, ...data, updated_at: new Date().toISOString() } : task
+      )
+    );
+
+    try {
+      const updatedTask = await updateTask(id, data);
+      // Update with server response
+      setTasks((prev) => prev.map((task) => (task.id === id ? updatedTask : task)));
+    } catch (err) {
+      // Revert on error
+      setTasks(previousTasks);
+
+      const errorResult = handleApiError(err);
+      alert(errorResult.message); // Simple error display for now
+
+      // Redirect if unauthorized
+      if (errorResult.shouldRedirect) {
+        signout();
+      }
+
+      throw err;
+    }
+  };
+
+  /**
+   * Delete a task
+   */
+  const handleDeleteTask = async (id: number) => {
+    // Optimistic update
+    const previousTasks = [...tasks];
+    setTasks((prev) => prev.filter((task) => task.id !== id));
+
+    try {
+      await deleteTask(id);
+    } catch (err) {
+      // Revert on error
+      setTasks(previousTasks);
+
+      const errorResult = handleApiError(err);
+      alert(errorResult.message); // Simple error display for now
+
+      // Redirect if unauthorized
+      if (errorResult.shouldRedirect) {
+        signout();
+      }
+
+      throw err;
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <header className="bg-white shadow">
+        <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <h1 className="text-3xl font-bold tracking-tight text-gray-900">
+            My Tasks
+          </h1>
+          <div className="flex items-center gap-4">
+            <span className="text-sm text-gray-600">{user?.email}</span>
+            <button
+              onClick={signout}
+              className="rounded-md bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+            >
+              Sign out
+            </button>
+          </div>
+        </div>
+      </header>
+
+      {/* Main Content */}
+      <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+        <div className="space-y-6">
+          {/* Task Creation Form */}
+          <div className="bg-white shadow sm:rounded-lg p-6">
+            <TaskForm
+              onSubmit={handleCreateTask}
+              loading={createLoading}
+              error={createError}
+            />
+          </div>
+
+          {/* Task List */}
+          <div className="bg-white shadow sm:rounded-lg p-6">
+            <h2 className="text-lg font-medium text-gray-900 mb-4">
+              Your Tasks ({tasks.length})
+            </h2>
+            <TaskList
+              tasks={tasks}
+              loading={loading}
+              error={error}
+              onUpdate={handleUpdateTask}
+              onDelete={handleDeleteTask}
+            />
+          </div>
+        </div>
+      </main>
+    </div>
+  );
+}
