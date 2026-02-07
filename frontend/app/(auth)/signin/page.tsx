@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import AuthForm from '@/components/auth/AuthForm';
@@ -9,10 +9,10 @@ import { getErrorMessage, getValidationErrors } from '@/lib/utils/errors';
 import { SigninFormData } from '@/types';
 
 /**
- * Signin Page
- * User authentication page
+ * Signin Content Component
+ * Handles the signin logic and uses useSearchParams
  */
-export default function SigninPage() {
+function SigninContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { signin, user, loading: authLoading } = useAuth();
@@ -115,5 +115,26 @@ export default function SigninPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+/**
+ * Signin Page
+ * User authentication page with Suspense boundary
+ */
+export default function SigninPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex min-h-screen items-center justify-center bg-gray-50">
+          <div className="text-center">
+            <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-blue-600 border-r-transparent"></div>
+            <p className="mt-4 text-gray-600">Loading...</p>
+          </div>
+        </div>
+      }
+    >
+      <SigninContent />
+    </Suspense>
   );
 }

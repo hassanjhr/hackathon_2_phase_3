@@ -8,12 +8,17 @@ import { validateSigninForm, validateSignupForm } from '@/lib/utils/validation';
  * AuthForm Component
  * Reusable form for both signup and signin
  */
-interface AuthFormProps {
-  mode: 'signin' | 'signup';
-  onSubmit: (data: SigninFormData | SignupFormData) => Promise<void>;
+type AuthFormProps = {
+  mode: 'signin';
+  onSubmit: (data: SigninFormData) => Promise<void>;
   loading?: boolean;
   error?: string | null;
-}
+} | {
+  mode: 'signup';
+  onSubmit: (data: SignupFormData) => Promise<void>;
+  loading?: boolean;
+  error?: string | null;
+};
 
 export default function AuthForm({ mode, onSubmit, loading = false, error = null }: AuthFormProps) {
   const [email, setEmail] = useState('');
@@ -45,7 +50,11 @@ export default function AuthForm({ mode, onSubmit, loading = false, error = null
 
     // Submit form
     try {
-      await onSubmit(formData as SigninFormData | SignupFormData);
+      if (isSignup) {
+        await onSubmit(formData as SignupFormData);
+      } else {
+        await onSubmit(formData as SigninFormData);
+      }
     } catch (err) {
       // Error handling is done by parent component
     }
