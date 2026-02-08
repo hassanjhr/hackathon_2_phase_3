@@ -15,7 +15,7 @@ interface TaskItemProps {
 
 export default function TaskItem({ task, onUpdate, onDelete }: TaskItemProps) {
   const [isEditing, setIsEditing] = useState(false);
-  const [editTitle, setEditTitle] = useState(task.title);
+  const [editTitle, setEditTitle] = useState(task.title || '');
   const [isUpdating, setIsUpdating] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
@@ -87,7 +87,7 @@ export default function TaskItem({ task, onUpdate, onDelete }: TaskItemProps) {
         {isEditing ? (
           <input
             type="text"
-            value={editTitle}
+            value={editTitle || ''}
             onChange={(e) => setEditTitle(e.target.value)}
             onKeyDown={(e) => {
               if (e.key === 'Enter') {
