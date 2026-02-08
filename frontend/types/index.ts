@@ -38,7 +38,8 @@ export interface UserCredentials {
 export interface Task {
   id: string; // UUID from backend
   title: string;
-  completed: boolean;
+  description?: string | null;
+  is_completed: boolean;
   user_id: string; // UUID from backend
   created_at: string;
   updated_at: string;
@@ -49,6 +50,7 @@ export interface Task {
  */
 export interface CreateTaskData {
   title: string;
+  description?: string;
 }
 
 /**
@@ -56,7 +58,8 @@ export interface CreateTaskData {
  */
 export interface UpdateTaskData {
   title?: string;
-  completed?: boolean;
+  description?: string;
+  is_completed?: boolean;
 }
 
 // ============================================================================
@@ -112,6 +115,7 @@ export interface SigninFormData {
  */
 export interface TaskFormData {
   title: string;
+  description?: string;
 }
 
 // ============================================================================

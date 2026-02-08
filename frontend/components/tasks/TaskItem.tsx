@@ -23,7 +23,7 @@ export default function TaskItem({ task, onUpdate, onDelete }: TaskItemProps) {
   const handleToggleComplete = async () => {
     setIsUpdating(true);
     try {
-      await onUpdate({ completed: !task.completed });
+      await onUpdate({ is_completed: !task.is_completed });
     } catch (error) {
       // Error handled by parent
     } finally {
@@ -75,11 +75,11 @@ export default function TaskItem({ task, onUpdate, onDelete }: TaskItemProps) {
       {/* Checkbox */}
       <input
         type="checkbox"
-        checked={task.completed}
+        checked={task.is_completed}
         onChange={handleToggleComplete}
         disabled={isUpdating || isDeleting}
         className="h-5 w-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500 disabled:opacity-50 cursor-pointer"
-        aria-label={`Mark "${task.title}" as ${task.completed ? 'incomplete' : 'complete'}`}
+        aria-label={`Mark "${task.title}" as ${task.is_completed ? 'incomplete' : 'complete'}`}
       />
 
       {/* Task Title */}
@@ -101,13 +101,24 @@ export default function TaskItem({ task, onUpdate, onDelete }: TaskItemProps) {
             autoFocus
           />
         ) : (
-          <p
-            className={`text-sm ${
-              task.completed ? 'line-through text-gray-500' : 'text-gray-900'
-            }`}
-          >
-            {task.title}
-          </p>
+          <div>
+            <p
+              className={`text-sm font-medium ${
+                task.is_completed ? 'line-through text-gray-500' : 'text-gray-900'
+              }`}
+            >
+              {task.title}
+            </p>
+            {task.description && (
+              <p
+                className={`text-xs mt-1 ${
+                  task.is_completed ? 'line-through text-gray-400' : 'text-gray-600'
+                }`}
+              >
+                {task.description}
+              </p>
+            )}
+          </div>
         )}
       </div>
 

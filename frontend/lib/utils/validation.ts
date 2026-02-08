@@ -102,10 +102,28 @@ export function validateTaskTitle(title: string): ValidationResult {
     };
   }
 
-  if (title.length > 500) {
+  if (title.length > 200) {
     return {
       isValid: false,
-      error: 'Task title is too long (maximum 500 characters)',
+      error: 'Task title is too long (maximum 200 characters)',
+    };
+  }
+
+  return { isValid: true };
+}
+
+/**
+ * Validate task description
+ */
+export function validateTaskDescription(description?: string): ValidationResult {
+  if (!description || description.trim() === '') {
+    return { isValid: true }; // Description is optional
+  }
+
+  if (description.length > 2000) {
+    return {
+      isValid: false,
+      error: 'Description is too long (maximum 2000 characters)',
     };
   }
 
@@ -194,12 +212,17 @@ export function validateSigninForm(data: {
 /**
  * Validate task form data
  */
-export function validateTaskForm(data: { title: string }): Record<string, string> {
+export function validateTaskForm(data: { title: string; description?: string }): Record<string, string> {
   const errors: Record<string, string> = {};
 
   const titleValidation = validateTaskTitle(data.title);
   if (!titleValidation.isValid) {
     errors.title = titleValidation.error!;
+  }
+
+  const descriptionValidation = validateTaskDescription(data.description);
+  if (!descriptionValidation.isValid) {
+    errors.description = descriptionValidation.error!;
   }
 
   return errors;
