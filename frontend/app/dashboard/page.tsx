@@ -79,7 +79,7 @@ export default function DashboardPage() {
   /**
    * Update a task
    */
-  const handleUpdateTask = async (id: number, data: UpdateTaskData) => {
+  const handleUpdateTask = async (id: string, data: UpdateTaskData) => {
     // Optimistic update
     const previousTasks = [...tasks];
     setTasks((prev) =>
@@ -111,7 +111,7 @@ export default function DashboardPage() {
   /**
    * Delete a task
    */
-  const handleDeleteTask = async (id: number) => {
+  const handleDeleteTask = async (id: string) => {
     // Optimistic update
     const previousTasks = [...tasks];
     setTasks((prev) => prev.filter((task) => task.id !== id));

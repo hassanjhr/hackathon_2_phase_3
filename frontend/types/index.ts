@@ -16,7 +16,7 @@
  * Represents an authenticated user in the application
  */
 export interface User {
-  id: number;
+  id: string; // UUID from backend
   email: string;
 }
 
@@ -36,10 +36,10 @@ export interface UserCredentials {
  * Represents a todo task owned by a user
  */
 export interface Task {
-  id: number;
+  id: string; // UUID from backend
   title: string;
   completed: boolean;
-  user_id: number;
+  user_id: string; // UUID from backend
   created_at: string;
   updated_at: string;
 }
@@ -209,8 +209,8 @@ export interface TaskListProps {
   tasks: Task[];
   loading?: boolean;
   error?: string | null;
-  onUpdate: (id: number, data: UpdateTaskData) => Promise<void>;
-  onDelete: (id: number) => Promise<void>;
+  onUpdate: (id: string, data: UpdateTaskData) => Promise<void>;
+  onDelete: (id: string) => Promise<void>;
 }
 
 /**

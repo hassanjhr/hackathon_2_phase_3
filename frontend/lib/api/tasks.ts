@@ -12,7 +12,7 @@ import { getUser } from '@/lib/auth/token';
 /**
  * Get user ID from stored user data
  */
-function getUserId(): number {
+function getUserId(): string {
   const user = getUser();
   if (!user || !user.id) {
     throw new Error('User not authenticated');
@@ -40,7 +40,7 @@ export async function createTask(data: CreateTaskData): Promise<Task> {
 /**
  * Update an existing task
  */
-export async function updateTask(id: number, data: UpdateTaskData): Promise<Task> {
+export async function updateTask(id: string, data: UpdateTaskData): Promise<Task> {
   const userId = getUserId();
   return apiClient.put<Task>(`/api/${userId}/tasks/${id}`, data, true);
 }
@@ -48,7 +48,7 @@ export async function updateTask(id: number, data: UpdateTaskData): Promise<Task
 /**
  * Delete a task
  */
-export async function deleteTask(id: number): Promise<{ message: string }> {
+export async function deleteTask(id: string): Promise<{ message: string }> {
   const userId = getUserId();
   return apiClient.delete<{ message: string }>(`/api/${userId}/tasks/${id}`, true);
 }

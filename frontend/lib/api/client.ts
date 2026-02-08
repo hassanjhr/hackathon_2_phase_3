@@ -275,25 +275,29 @@ class ApiClientClass {
         errorData = { detail: response.statusText };
       }
 
-      logError('API Request', {
+      const errorMessage = typeof errorData.detail === 'string'
+        ? errorData.detail
+        : 'Request failed';
+
+      console.error('[API Request Failed]', {
         url,
         method,
         status: response.status,
-        error: errorData,
+        message: errorMessage,
+        details: errorData,
       });
 
-      throw createApiError(
-        response.status,
-        typeof errorData.detail === 'string'
-          ? errorData.detail
-          : 'Request failed'
-      );
+      throw createApiError(response.status, errorMessage);
     } catch (error) {
       if (error && typeof error === 'object' && 'status' in error) {
         throw error;
       }
 
-      logError('API Request', { url, method, error });
+      console.error('[API Network Error]', {
+        url,
+        method,
+        error: error instanceof Error ? error.message : String(error),
+      });
       throw createApiError(0, 'Network error. Please check your connection.');
     }
   }
