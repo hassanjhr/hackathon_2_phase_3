@@ -93,7 +93,7 @@ app = FastAPI(
 # Security: Only allow requests from configured frontend URL
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[settings.FRONTEND_URL],  # Frontend origin from environment
+    allow_origins=settings.cors_origins,  # Frontend origins from environment (comma-separated)
     allow_credentials=True,  # Allow cookies and Authorization headers
     allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],  # Allowed HTTP methods
     allow_headers=[

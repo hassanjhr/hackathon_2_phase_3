@@ -224,6 +224,7 @@ class ApiClientClass {
 
   setToken(token: string | null): void {
     this.token = token;
+    console.log('[API Client] Token updated:', token ? `${token.substring(0, 20)}...` : 'null');
   }
 
   getToken(): string | null {
@@ -285,7 +286,18 @@ class ApiClientClass {
         status: response.status,
         message: errorMessage,
         details: errorData,
+        hasToken: !!this.token,
+        authRequired: requiresAuth,
       });
+
+      // Handle 401 Unauthorized - token is invalid or missing
+      if (response.status === 401) {
+        // Clear token from API client
+        this.setToken(null);
+
+        // Note: The calling code should handle 401 by redirecting to signin
+        // We can't import useRouter here as this is not a React component
+      }
 
       throw createApiError(response.status, errorMessage);
     } catch (error) {
@@ -325,6 +337,14 @@ class ApiClientClass {
   async delete<T>(endpoint: string, requiresAuth = true): Promise<T> {
     return this.request<T>(endpoint, {
       method: 'DELETE',
+      requiresAuth,
+    });
+  }
+
+  async patch<T>(endpoint: string, data?: unknown, requiresAuth = true): Promise<T> {
+    return this.request<T>(endpoint, {
+      method: 'PATCH',
+      body: data,
       requiresAuth,
     });
   }

@@ -64,23 +64,23 @@ export function getValidationErrors(error: unknown): Record<string, string> {
 export function getStatusMessage(status: number): string {
   switch (status) {
     case HttpStatus.BAD_REQUEST:
-      return 'Invalid request. Please check your input.';
+      return 'Invalid request. Please check your input and try again.';
     case HttpStatus.UNAUTHORIZED:
-      return 'Authentication required. Please sign in.';
+      return 'Your session has expired. Please sign in again.';
     case HttpStatus.FORBIDDEN:
-      return 'Access denied. You do not have permission.';
+      return 'You do not have permission to perform this action.';
     case HttpStatus.NOT_FOUND:
-      return 'Resource not found.';
+      return 'The requested item could not be found. It may have been deleted.';
     case HttpStatus.UNPROCESSABLE_ENTITY:
-      return 'Validation error. Please check your input.';
+      return 'Please check your input and correct any errors.';
     case HttpStatus.TOO_MANY_REQUESTS:
-      return 'Too many requests. Please try again later.';
+      return 'Too many requests. Please wait a moment and try again.';
     case HttpStatus.INTERNAL_SERVER_ERROR:
-      return 'Something went wrong on our end. Please try again.';
+      return 'Something went wrong on our end. Our team has been notified. Please try again.';
     case HttpStatus.SERVICE_UNAVAILABLE:
-      return 'Service temporarily unavailable. Please try again later.';
+      return 'The service is temporarily unavailable. Please try again in a few minutes.';
     default:
-      return 'An error occurred. Please try again.';
+      return 'An unexpected error occurred. Please try again or contact support if the problem persists.';
   }
 }
 

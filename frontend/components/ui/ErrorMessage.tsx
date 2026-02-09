@@ -10,11 +10,11 @@ interface ErrorMessageProps {
 
 export default function ErrorMessage({ message, onRetry, className = '' }: ErrorMessageProps) {
   return (
-    <div className={`rounded-md bg-red-50 p-4 ${className}`} role="alert">
+    <div className={`rounded-md bg-red-50 border border-red-200 p-4 ${className}`} role="alert">
       <div className="flex">
         <div className="flex-shrink-0">
           <svg
-            className="h-5 w-5 text-red-400"
+            className="h-5 w-5 text-red-500"
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 20 20"
             fill="currentColor"
@@ -28,13 +28,14 @@ export default function ErrorMessage({ message, onRetry, className = '' }: Error
           </svg>
         </div>
         <div className="ml-3 flex-1">
-          <p className="text-sm text-red-800">{message}</p>
+          <p className="text-sm font-medium text-red-800">{message}</p>
         </div>
         {onRetry && (
           <div className="ml-auto pl-3">
             <button
               onClick={onRetry}
-              className="inline-flex rounded-md bg-red-50 px-2 py-1.5 text-sm font-medium text-red-800 hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2 focus:ring-offset-red-50"
+              className="inline-flex rounded-md bg-red-600 px-3 py-1.5 text-sm font-semibold text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2 transition-colors shadow-sm"
+              aria-label="Retry action"
             >
               Retry
             </button>

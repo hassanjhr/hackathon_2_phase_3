@@ -11,8 +11,8 @@ interface TaskListProps {
   tasks: Task[];
   loading?: boolean;
   error?: string | null;
-  onUpdate: (id: number, data: UpdateTaskData) => Promise<void>;
-  onDelete: (id: number) => Promise<void>;
+  onUpdate: (id: string, data: UpdateTaskData) => Promise<void>;
+  onDelete: (id: string) => Promise<void>;
 }
 
 export default function TaskList({ tasks, loading = false, error = null, onUpdate, onDelete }: TaskListProps) {
@@ -42,7 +42,7 @@ export default function TaskList({ tasks, loading = false, error = null, onUpdat
     return (
       <div className="text-center py-12">
         <svg
-          className="mx-auto h-12 w-12 text-gray-400"
+          className="mx-auto h-12 w-12 text-blue-400"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -55,8 +55,8 @@ export default function TaskList({ tasks, loading = false, error = null, onUpdat
             d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
           />
         </svg>
-        <h3 className="mt-2 text-sm font-medium text-gray-900">No tasks yet</h3>
-        <p className="mt-1 text-sm text-gray-500">Get started by creating a new task above.</p>
+        <h3 className="mt-2 text-sm font-semibold text-black">No tasks yet</h3>
+        <p className="mt-1 text-sm text-gray-600">Get started by creating a new task above.</p>
       </div>
     );
   }

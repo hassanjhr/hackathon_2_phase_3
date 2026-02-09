@@ -367,7 +367,7 @@ export function getEnvVar(key: keyof EnvironmentVariables): string {
 /**
  * HTTP methods supported by API client
  */
-export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
+export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 
 /**
  * Request options for API client

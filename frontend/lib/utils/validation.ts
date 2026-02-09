@@ -95,13 +95,6 @@ export function validateTaskTitle(title: string): ValidationResult {
     };
   }
 
-  if (title.trim().length < 1) {
-    return {
-      isValid: false,
-      error: 'Task title cannot be empty',
-    };
-  }
-
   if (title.length > 200) {
     return {
       isValid: false,

@@ -137,16 +137,17 @@ export default function DashboardPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-white shadow">
+      <header className="bg-white shadow-md border-b-2 border-blue-600">
         <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-          <h1 className="text-3xl font-bold tracking-tight text-gray-900">
+          <h1 className="text-3xl font-bold tracking-tight text-black">
             My Tasks
           </h1>
           <div className="flex items-center gap-4">
-            <span className="text-sm text-gray-600">{user?.email}</span>
+            <span className="text-sm text-black font-medium">{user?.email}</span>
             <button
               onClick={signout}
-              className="rounded-md bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+              className="rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 shadow-sm transition-colors"
+              aria-label="Sign out"
             >
               Sign out
             </button>
@@ -158,7 +159,10 @@ export default function DashboardPage() {
       <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <div className="space-y-6">
           {/* Task Creation Form */}
-          <div className="bg-white shadow sm:rounded-lg p-6">
+          <div className="bg-white shadow-md sm:rounded-lg p-6 border border-gray-200">
+            <h2 className="text-lg font-semibold text-black mb-4">
+              Create New Task
+            </h2>
             <TaskForm
               onSubmit={handleCreateTask}
               loading={createLoading}
@@ -167,8 +171,8 @@ export default function DashboardPage() {
           </div>
 
           {/* Task List */}
-          <div className="bg-white shadow sm:rounded-lg p-6">
-            <h2 className="text-lg font-medium text-gray-900 mb-4">
+          <div className="bg-white shadow-md sm:rounded-lg p-6 border border-gray-200">
+            <h2 className="text-lg font-semibold text-black mb-4">
               Your Tasks ({tasks.length})
             </h2>
             <TaskList

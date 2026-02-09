@@ -28,6 +28,37 @@ export default function AuthForm({ mode, onSubmit, loading = false, error = null
 
   const isSignup = mode === 'signup';
 
+  // Clear validation error when user starts typing
+  const handleEmailChange = (value: string) => {
+    setEmail(value);
+    if (validationErrors.email) {
+      setValidationErrors((prev) => {
+        const { email, ...rest } = prev;
+        return rest;
+      });
+    }
+  };
+
+  const handlePasswordChange = (value: string) => {
+    setPassword(value);
+    if (validationErrors.password) {
+      setValidationErrors((prev) => {
+        const { password, ...rest } = prev;
+        return rest;
+      });
+    }
+  };
+
+  const handleConfirmPasswordChange = (value: string) => {
+    setConfirmPassword(value);
+    if (validationErrors.confirmPassword) {
+      setValidationErrors((prev) => {
+        const { confirmPassword, ...rest } = prev;
+        return rest;
+      });
+    }
+  };
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
@@ -64,7 +95,7 @@ export default function AuthForm({ mode, onSubmit, loading = false, error = null
     <form onSubmit={handleSubmit} className="space-y-6">
       {/* Email Field */}
       <div>
-        <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+        <label htmlFor="email" className="block text-sm font-medium text-black">
           Email address
         </label>
         <input
@@ -74,8 +105,9 @@ export default function AuthForm({ mode, onSubmit, loading = false, error = null
           autoComplete="email"
           required
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className={`mt-1 block w-full rounded-md border px-3 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+          onChange={(e) => handleEmailChange(e.target.value)}
+          placeholder="Enter your email"
+          className={`mt-1 block w-full rounded-md border px-3 py-2 shadow-sm !text-black bg-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
             validationErrors.email
               ? 'border-red-500 focus:border-red-500 focus:ring-red-500'
               : 'border-gray-300'
@@ -93,7 +125,7 @@ export default function AuthForm({ mode, onSubmit, loading = false, error = null
 
       {/* Password Field */}
       <div>
-        <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+        <label htmlFor="password" className="block text-sm font-medium text-black">
           Password
         </label>
         <input
@@ -103,8 +135,9 @@ export default function AuthForm({ mode, onSubmit, loading = false, error = null
           autoComplete={isSignup ? 'new-password' : 'current-password'}
           required
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className={`mt-1 block w-full rounded-md border px-3 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+          onChange={(e) => handlePasswordChange(e.target.value)}
+          placeholder="Enter your password"
+          className={`mt-1 block w-full rounded-md border px-3 py-2 shadow-sm !text-black bg-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
             validationErrors.password
               ? 'border-red-500 focus:border-red-500 focus:ring-red-500'
               : 'border-gray-300'
@@ -128,7 +161,7 @@ export default function AuthForm({ mode, onSubmit, loading = false, error = null
       {/* Confirm Password Field (Signup only) */}
       {isSignup && (
         <div>
-          <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
+          <label htmlFor="confirmPassword" className="block text-sm font-medium text-black">
             Confirm Password
           </label>
           <input
@@ -138,8 +171,9 @@ export default function AuthForm({ mode, onSubmit, loading = false, error = null
             autoComplete="new-password"
             required
             value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            className={`mt-1 block w-full rounded-md border px-3 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+            onChange={(e) => handleConfirmPasswordChange(e.target.value)}
+            placeholder="Confirm your password"
+            className={`mt-1 block w-full rounded-md border px-3 py-2 shadow-sm !text-black bg-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
               validationErrors.confirmPassword
                 ? 'border-red-500 focus:border-red-500 focus:ring-red-500'
                 : 'border-gray-300'

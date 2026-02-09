@@ -39,7 +39,7 @@ export function removeToken(): void {
 /**
  * Save user data to localStorage
  */
-export function saveUser(user: { id: number; email: string }): void {
+export function saveUser(user: { id: string; email: string }): void {
   if (typeof window !== 'undefined') {
     localStorage.setItem(USER_KEY, JSON.stringify(user));
   }
@@ -48,7 +48,7 @@ export function saveUser(user: { id: number; email: string }): void {
 /**
  * Get user data from localStorage
  */
-export function getUser(): { id: number; email: string } | null {
+export function getUser(): { id: string; email: string } | null {
   if (typeof window !== 'undefined') {
     const userStr = localStorage.getItem(USER_KEY);
     if (userStr) {

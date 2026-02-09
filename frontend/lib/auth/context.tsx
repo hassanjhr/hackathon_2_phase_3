@@ -3,7 +3,7 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
 import { User, AuthContextValue } from '@/types';
-import { signin as signinApi, signup as signupApi, signout as signoutApi } from '@/lib/api/auth';
+import { signin as signinApi, signup as signupApi } from '@/lib/api/auth';
 import { saveToken, getToken, saveUser, getUser, clearAuthData } from './token';
 import { apiClient } from '@/lib/api/client';
 
@@ -26,13 +26,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
    * Load token and user from localStorage on mount
    */
   const loadToken = () => {
+    console.log('[Auth Context] Loading token from localStorage...');
     const storedToken = getToken();
     const storedUser = getUser();
 
     if (storedToken && storedUser) {
+      console.log('[Auth Context] Token found, setting in API client');
       setToken(storedToken);
       setUser(storedUser);
       apiClient.setToken(storedToken);
+    } else {
+      console.log('[Auth Context] No token found in localStorage');
     }
 
     setLoading(false);
@@ -50,9 +54,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
    * Sign in an existing user
    */
   const signin = async (email: string, password: string) => {
+    console.log('[Auth Context] Signing in...');
     const response = await signinApi(email, password);
 
-    // Save token and user
+    console.log('[Auth Context] Signin successful, saving token and user');
+
+    // Save token and user to localStorage
     saveToken(response.token);
     saveUser(response.user);
 
@@ -60,26 +67,38 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setToken(response.token);
     setUser(response.user);
 
-    // Set token in API client
+    // CRITICAL: Set token in API client so all subsequent requests include it
+    console.log('[Auth Context] Setting token in API client');
     apiClient.setToken(response.token);
+
+    console.log('[Auth Context] Token set, user authenticated');
   };
 
   /**
    * Sign out the current user
+   *
+   * JWT-based auth is stateless, so signout is purely client-side:
+   * 1. Clear token and user from localStorage
+   * 2. Clear token from API client
+   * 3. Update React state
+   * 4. Redirect to signin page
    */
   const signout = () => {
-    // Call backend signout (optional)
-    signoutApi().catch(() => {
-      // Ignore errors
-    });
+    console.log('[Auth Context] Signing out (client-side only)...');
 
-    // Clear local state
+    // Clear authentication data from localStorage
     clearAuthData();
+
+    // Clear React state
     setToken(null);
     setUser(null);
+
+    // Clear token from API client (important!)
     apiClient.setToken(null);
 
-    // Redirect to signin
+    console.log('[Auth Context] Signout complete, redirecting to signin');
+
+    // Redirect to signin page
     router.push('/signin');
   };
 

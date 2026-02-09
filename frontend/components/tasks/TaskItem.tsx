@@ -19,11 +19,21 @@ export default function TaskItem({ task, onUpdate, onDelete }: TaskItemProps) {
   const [isUpdating, setIsUpdating] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [showCompletionNotification, setShowCompletionNotification] = useState(false);
 
   const handleToggleComplete = async () => {
+    const willBeCompleted = !task.is_completed;
     setIsUpdating(true);
     try {
-      await onUpdate({ is_completed: !task.is_completed });
+      await onUpdate({ is_completed: willBeCompleted });
+      // Show completion notification only when marking as completed
+      if (willBeCompleted) {
+        setShowCompletionNotification(true);
+        // Auto-hide after 3 seconds
+        setTimeout(() => {
+          setShowCompletionNotification(false);
+        }, 3000);
+      }
     } catch (error) {
       // Error handled by parent
     } finally {
@@ -96,19 +106,26 @@ export default function TaskItem({ task, onUpdate, onDelete }: TaskItemProps) {
                 handleCancelEdit();
               }
             }}
-            className="w-full px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white !text-black placeholder-gray-400"
             disabled={isUpdating}
             autoFocus
           />
         ) : (
           <div>
-            <p
-              className={`text-sm font-medium ${
-                task.is_completed ? 'line-through text-gray-500' : 'text-gray-900'
-              }`}
-            >
-              {task.title}
-            </p>
+            <div className="flex items-center gap-2">
+              <p
+                className={`text-sm font-medium ${
+                  task.is_completed ? 'line-through text-gray-500' : 'text-gray-900'
+                }`}
+              >
+                {task.title}
+              </p>
+              {task.is_completed && (
+                <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800">
+                  ✓ Completed
+                </span>
+              )}
+            </div>
             {task.description && (
               <p
                 className={`text-xs mt-1 ${
@@ -187,6 +204,33 @@ export default function TaskItem({ task, onUpdate, onDelete }: TaskItemProps) {
                 className="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-md hover:bg-red-700 disabled:opacity-50"
               >
                 {isDeleting ? 'Deleting...' : 'Delete'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Completion Notification */}
+      {showCompletionNotification && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 max-w-md mx-4 shadow-xl">
+            <div className="flex items-center justify-center mb-4">
+              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
+                <svg className="w-10 h-10 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+            </div>
+            <h3 className="text-lg font-medium text-gray-900 text-center mb-2">Task Completed! 🎉</h3>
+            <p className="text-sm text-gray-600 text-center mb-4">
+              Your task, <span className="font-semibold">"{task.title}"</span>, is completed.
+            </p>
+            <div className="flex justify-center">
+              <button
+                onClick={() => setShowCompletionNotification(false)}
+                className="px-6 py-2 text-sm font-medium text-white bg-green-600 rounded-md hover:bg-green-700 transition-colors"
+              >
+                Great!
               </button>
             </div>
           </div>

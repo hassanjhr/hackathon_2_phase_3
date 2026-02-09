@@ -82,9 +82,12 @@ export async function signin(
 
 export async function signout(): Promise<void> {
   try {
-    await apiClient.post('/api/auth/signout', {}, true);
+    // Call backend signout endpoint (optional, doesn't require auth)
+    // The endpoint might not exist, which is fine - signout is client-side
+    await apiClient.post('/api/auth/signout', {}, false);
   } catch {
-    // ignore
+    // Silently ignore - backend signout is optional for JWT-based auth
+    // The important part is clearing client-side state (localStorage, API client)
   }
 }
 

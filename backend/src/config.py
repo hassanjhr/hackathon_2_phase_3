@@ -3,7 +3,7 @@
 # Security: All secrets must be loaded from environment, never hardcoded
 
 from pydantic_settings import BaseSettings
-from typing import Optional
+from typing import List, Optional
 
 
 class Settings(BaseSettings):
@@ -36,7 +36,13 @@ class Settings(BaseSettings):
     JWT_EXPIRATION_HOURS: int = 24
 
     # CORS Configuration (Required)
+    # Comma-separated list of allowed origins (e.g., "http://localhost:3000,https://myapp.vercel.app")
     FRONTEND_URL: str
+
+    @property
+    def cors_origins(self) -> List[str]:
+        """Parse FRONTEND_URL into a list of origins (supports comma-separated values)."""
+        return [origin.strip() for origin in self.FRONTEND_URL.split(",") if origin.strip()]
 
     # Server Configuration (Optional)
     BACKEND_HOST: str = "0.0.0.0"

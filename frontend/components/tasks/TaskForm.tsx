@@ -19,6 +19,30 @@ export default function TaskForm({ onSubmit, loading = false, error = null }: Ta
   const [description, setDescription] = useState('');
   const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
 
+  const handleTitleChange = (value: string) => {
+    setTitle(value);
+    // Clear title validation error when user starts typing
+    if (validationErrors.title) {
+      setValidationErrors(prev => {
+        const newErrors = { ...prev };
+        delete newErrors.title;
+        return newErrors;
+      });
+    }
+  };
+
+  const handleDescriptionChange = (value: string) => {
+    setDescription(value);
+    // Clear description validation error when user starts typing
+    if (validationErrors.description) {
+      setValidationErrors(prev => {
+        const newErrors = { ...prev };
+        delete newErrors.description;
+        return newErrors;
+      });
+    }
+  };
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
@@ -43,6 +67,7 @@ export default function TaskForm({ onSubmit, loading = false, error = null }: Ta
       // Clear form on success
       setTitle('');
       setDescription('');
+      setValidationErrors({});
     } catch (err) {
       // Error handling is done by parent component
     }
@@ -61,8 +86,8 @@ export default function TaskForm({ onSubmit, loading = false, error = null }: Ta
           type="text"
           placeholder="What needs to be done?"
           value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          className={`block w-full rounded-md border px-3 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+          onChange={(e) => handleTitleChange(e.target.value)}
+          className={`block w-full rounded-md border px-3 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white !text-black placeholder-gray-400 ${
             validationErrors.title
               ? 'border-red-500 focus:border-red-500 focus:ring-red-500'
               : 'border-gray-300'
@@ -90,8 +115,8 @@ export default function TaskForm({ onSubmit, loading = false, error = null }: Ta
           rows={3}
           placeholder="Add more details about this task..."
           value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          className={`block w-full rounded-md border px-3 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+          onChange={(e) => handleDescriptionChange(e.target.value)}
+          className={`block w-full rounded-md border px-3 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white !text-black placeholder-gray-400 ${
             validationErrors.description
               ? 'border-red-500 focus:border-red-500 focus:ring-red-500'
               : 'border-gray-300'
