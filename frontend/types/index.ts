@@ -361,6 +361,59 @@ export function getEnvVar(key: keyof EnvironmentVariables): string {
 }
 
 // ============================================================================
+// Chat Types
+// ============================================================================
+
+/**
+ * Tool call information from AI agent
+ */
+export interface ToolCallInfo {
+  tool_name: string;
+  parameters: Record<string, unknown>;
+  result: Record<string, unknown>;
+  success: boolean;
+}
+
+/**
+ * Request to send a chat message
+ */
+export interface ChatRequest {
+  message: string;
+  conversation_id?: string | null;
+}
+
+/**
+ * Response from the chat endpoint
+ */
+export interface ChatResponse {
+  conversation_id: string;
+  response: string;
+  tool_calls: ToolCallInfo[];
+}
+
+/**
+ * Conversation summary for list view
+ */
+export interface ConversationSummary {
+  id: string;
+  title: string | null;
+  last_message: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+/**
+ * Single message in a conversation
+ */
+export interface ChatMessage {
+  id: string;
+  role: 'user' | 'assistant' | 'system';
+  content: string;
+  tool_calls?: ToolCallInfo[] | null;
+  created_at: string;
+}
+
+// ============================================================================
 // API Client Types
 // ============================================================================
 

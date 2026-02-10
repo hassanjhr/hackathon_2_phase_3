@@ -38,6 +38,7 @@ class Task(SQLModel, table=True):
     """
 
     __tablename__ = "tasks"
+    __table_args__ = {"extend_existing": True}
 
     # Primary key: UUID for security (prevents enumeration)
     id: UUID = Field(

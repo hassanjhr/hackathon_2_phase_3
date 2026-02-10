@@ -429,6 +429,8 @@ Example: "Implement user todo list feature"
 - Neon Serverless PostgreSQL (cloud-hosted, production-grade) (001-todo-fullstack-app)
 - TypeScript/JavaScript with Next.js 16+ (App Router) + Next.js 16+, React 18+, Tailwind CSS (styling), Fetch API (HTTP client) (003-frontend-integration)
 - N/A (frontend consumes backend API, no local data persistence beyond auth tokens) (003-frontend-integration)
+- Python 3.11+ (backend), TypeScript (frontend) + FastAPI, OpenAI Agents SDK (`openai-agents`), SQLModel, Next.js 16+ (004-ai-agent-chat)
+- Neon Serverless PostgreSQL (existing) — new tables: `conversations`, `messages` (004-ai-agent-chat)
 
 ## Recent Changes
 - 001-todo-fullstack-app: Added Neon Serverless PostgreSQL (cloud-hosted, production-grade)

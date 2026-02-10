@@ -56,9 +56,8 @@ async def lifespan(app: FastAPI):
     logger.info(f"JWT Algorithm: {settings.JWT_ALGORITHM}")
     logger.info(f"JWT Expiration: {settings.JWT_EXPIRATION_HOURS} hours")
 
-    # Note: Database tables should be created via migrations
-    # Uncomment the line below only for development/testing
-    # await init_db()
+    # Create tables for any new models (conversations, messages)
+    await init_db()
 
     logger.info("Application startup complete")
 
@@ -222,8 +221,8 @@ async def root():
 # API Router Registration (T023, T033)
 # ============================================================================
 
-# Import authentication and task routes
-from api.routes import auth_router, tasks_router
+# Import authentication, task, and chat routes
+from api.routes import auth_router, tasks_router, chat_router
 
 # Register authentication routes
 # Security: Auth endpoints do NOT require JWT authentication (they issue tokens)
@@ -244,6 +243,15 @@ app.include_router(
 )
 
 logger.info("Task routes registered at /api")
+
+# Register chat routes
+app.include_router(
+    chat_router,
+    prefix="/api",
+    tags=["Chat"]
+)
+
+logger.info("Chat routes registered at /api")
 
 
 # ============================================================================

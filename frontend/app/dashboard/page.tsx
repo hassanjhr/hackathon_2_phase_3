@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth/context';
 import { Task, UpdateTaskData } from '@/types';
 import { getTasks, createTask, updateTask, deleteTask } from '@/lib/api/tasks';
@@ -14,6 +15,7 @@ import TaskList from '@/components/tasks/TaskList';
  */
 export default function DashboardPage() {
   const { user, signout } = useAuth();
+  const router = useRouter();
   const [tasks, setTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -143,6 +145,12 @@ export default function DashboardPage() {
             My Tasks
           </h1>
           <div className="flex items-center gap-4">
+            <button
+              onClick={() => router.push('/dashboard/chat')}
+              className="rounded-md bg-green-600 px-4 py-2 text-sm font-semibold text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 shadow-sm transition-colors"
+            >
+              AI Chat
+            </button>
             <span className="text-sm text-black font-medium">{user?.email}</span>
             <button
               onClick={signout}

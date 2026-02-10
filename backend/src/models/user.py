@@ -29,6 +29,7 @@ class User(SQLModel, table=True):
     """
 
     __tablename__ = "users"
+    __table_args__ = {"extend_existing": True}
 
     # Primary key: UUID for security (prevents enumeration)
     id: UUID = Field(
