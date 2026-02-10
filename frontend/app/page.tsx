@@ -40,13 +40,13 @@ export default function Home() {
 
   // Show landing page with Sign In / Sign Up options
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-br from-blue-50 via-white to-blue-100 px-4">
+    <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-br from-blue-50 via-white to-blue-100 px-4 py-8 sm:py-4">
       <div className="w-full max-w-md text-center">
         {/* App Logo/Icon */}
-        <div className="mb-8">
-          <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-blue-600 text-white shadow-xl border-4 border-white">
+        <div className="mb-6 sm:mb-8">
+          <div className="mx-auto flex h-16 w-16 sm:h-20 sm:w-20 items-center justify-center rounded-full bg-blue-600 text-white shadow-xl border-4 border-white">
             <svg
-              className="h-10 w-10"
+              className="h-8 w-8 sm:h-10 sm:w-10"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -63,18 +63,18 @@ export default function Home() {
         </div>
 
         {/* Hero Text */}
-        <h1 className="mb-4 text-4xl font-bold text-black">
+        <h1 className="mb-3 sm:mb-4 text-3xl sm:text-4xl font-bold text-black">
           Todo App
         </h1>
-        <p className="mb-8 text-lg text-gray-700">
+        <p className="mb-6 sm:mb-8 text-base sm:text-lg text-gray-700">
           Organize your tasks and boost your productivity
         </p>
 
         {/* Action Buttons */}
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           <Link
             href="/signin"
-            className="block w-full rounded-lg bg-blue-600 px-6 py-3 text-center font-semibold text-white shadow-lg transition-all hover:bg-blue-700 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            className="block w-full rounded-lg bg-blue-600 px-6 py-2.5 sm:py-3 text-center font-semibold text-white shadow-lg transition-all hover:bg-blue-700 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
             aria-label="Sign in to your account"
           >
             Sign In
@@ -82,7 +82,7 @@ export default function Home() {
 
           <Link
             href="/signup"
-            className="block w-full rounded-lg border-2 border-blue-600 bg-white px-6 py-3 text-center font-semibold text-blue-600 shadow-lg transition-all hover:bg-blue-50 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            className="block w-full rounded-lg border-2 border-blue-600 bg-white px-6 py-2.5 sm:py-3 text-center font-semibold text-blue-600 shadow-lg transition-all hover:bg-blue-50 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
             aria-label="Create a new account"
           >
             Sign Up
@@ -90,7 +90,7 @@ export default function Home() {
         </div>
 
         {/* Features */}
-        <div className="mt-12 space-y-3 text-sm text-gray-700">
+        <div className="mt-8 sm:mt-12 space-y-2.5 sm:space-y-3 text-sm text-gray-700">
           <div className="flex items-center justify-center gap-2">
             <svg className="h-5 w-5 text-green-600" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
               <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
