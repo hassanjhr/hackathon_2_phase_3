@@ -140,21 +140,21 @@ export default function DashboardPage() {
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <header className="bg-white shadow-md border-b-2 border-blue-600">
-        <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-          <h1 className="text-3xl font-bold tracking-tight text-black">
+        <div className="mx-auto max-w-7xl px-3 py-3 sm:px-6 sm:py-6 lg:px-8 flex justify-between items-center gap-2">
+          <h1 className="text-xl sm:text-3xl font-bold tracking-tight text-black truncate">
             My Tasks
           </h1>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 sm:gap-4 flex-shrink-0">
             <button
               onClick={() => router.push('/dashboard/chat')}
-              className="rounded-md bg-green-600 px-4 py-2 text-sm font-semibold text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 shadow-sm transition-colors"
+              className="rounded-md bg-green-600 px-2.5 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-semibold text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 shadow-sm transition-colors"
             >
               AI Chat
             </button>
-            <span className="text-sm text-black font-medium">{user?.email}</span>
+            <span className="text-sm text-black font-medium hidden sm:inline truncate max-w-[150px]">{user?.email}</span>
             <button
               onClick={signout}
-              className="rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 shadow-sm transition-colors"
+              className="rounded-md bg-blue-600 px-2.5 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-semibold text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 shadow-sm transition-colors"
               aria-label="Sign out"
             >
               Sign out
@@ -164,11 +164,11 @@ export default function DashboardPage() {
       </header>
 
       {/* Main Content */}
-      <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-        <div className="space-y-6">
+      <main className="mx-auto max-w-7xl px-3 py-4 sm:px-6 sm:py-8 lg:px-8">
+        <div className="space-y-4 sm:space-y-6">
           {/* Task Creation Form */}
-          <div className="bg-white shadow-md sm:rounded-lg p-6 border border-gray-200">
-            <h2 className="text-lg font-semibold text-black mb-4">
+          <div className="bg-white shadow-md sm:rounded-lg p-4 sm:p-6 border border-gray-200">
+            <h2 className="text-base sm:text-lg font-semibold text-black mb-3 sm:mb-4">
               Create New Task
             </h2>
             <TaskForm
@@ -179,8 +179,8 @@ export default function DashboardPage() {
           </div>
 
           {/* Task List */}
-          <div className="bg-white shadow-md sm:rounded-lg p-6 border border-gray-200">
-            <h2 className="text-lg font-semibold text-black mb-4">
+          <div className="bg-white shadow-md sm:rounded-lg p-4 sm:p-6 border border-gray-200">
+            <h2 className="text-base sm:text-lg font-semibold text-black mb-3 sm:mb-4">
               Your Tasks ({tasks.length})
             </h2>
             <TaskList

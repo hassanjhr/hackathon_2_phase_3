@@ -81,72 +81,117 @@ export default function TaskItem({ task, onUpdate, onDelete }: TaskItemProps) {
   };
 
   return (
-    <div className="flex items-center gap-3 p-4 bg-white border border-gray-200 rounded-lg hover:shadow-sm transition-shadow">
-      {/* Checkbox */}
-      <input
-        type="checkbox"
-        checked={task.is_completed}
-        onChange={handleToggleComplete}
-        disabled={isUpdating || isDeleting}
-        className="h-5 w-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500 disabled:opacity-50 cursor-pointer"
-        aria-label={`Mark "${task.title}" as ${task.is_completed ? 'incomplete' : 'complete'}`}
-      />
+    <div className="p-3 sm:p-4 bg-white border border-gray-200 rounded-lg hover:shadow-sm transition-shadow">
+      <div className="flex items-start sm:items-center gap-3">
+        {/* Checkbox */}
+        <input
+          type="checkbox"
+          checked={task.is_completed}
+          onChange={handleToggleComplete}
+          disabled={isUpdating || isDeleting}
+          className="h-5 w-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500 disabled:opacity-50 cursor-pointer mt-0.5 sm:mt-0 flex-shrink-0"
+          aria-label={`Mark "${task.title}" as ${task.is_completed ? 'incomplete' : 'complete'}`}
+        />
 
-      {/* Task Title */}
-      <div className="flex-1 min-w-0">
-        {isEditing ? (
-          <input
-            type="text"
-            value={editTitle || ''}
-            onChange={(e) => setEditTitle(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                handleSaveEdit();
-              } else if (e.key === 'Escape') {
-                handleCancelEdit();
-              }
-            }}
-            className="w-full px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white !text-black placeholder-gray-400"
-            disabled={isUpdating}
-            autoFocus
-          />
-        ) : (
-          <div>
-            <div className="flex items-center gap-2">
-              <p
-                className={`text-sm font-medium ${
-                  task.is_completed ? 'line-through text-gray-500' : 'text-gray-900'
-                }`}
-              >
-                {task.title}
-              </p>
-              {task.is_completed && (
-                <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800">
-                  ✓ Completed
-                </span>
+        {/* Task Title */}
+        <div className="flex-1 min-w-0">
+          {isEditing ? (
+            <input
+              type="text"
+              value={editTitle || ''}
+              onChange={(e) => setEditTitle(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  handleSaveEdit();
+                } else if (e.key === 'Escape') {
+                  handleCancelEdit();
+                }
+              }}
+              className="w-full px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white !text-black placeholder-gray-400 text-sm"
+              disabled={isUpdating}
+              autoFocus
+            />
+          ) : (
+            <div>
+              <div className="flex items-center gap-2 flex-wrap">
+                <p
+                  className={`text-sm font-medium break-words ${
+                    task.is_completed ? 'line-through text-gray-500' : 'text-gray-900'
+                  }`}
+                >
+                  {task.title}
+                </p>
+                {task.is_completed && (
+                  <span className="inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800">
+                    ✓ Done
+                  </span>
+                )}
+              </div>
+              {task.description && (
+                <p
+                  className={`text-xs mt-1 break-words ${
+                    task.is_completed ? 'line-through text-gray-400' : 'text-gray-600'
+                  }`}
+                >
+                  {task.description}
+                </p>
               )}
             </div>
-            {task.description && (
-              <p
-                className={`text-xs mt-1 ${
-                  task.is_completed ? 'line-through text-gray-400' : 'text-gray-600'
-                }`}
+          )}
+        </div>
+
+        {/* Actions - visible on sm+ screens */}
+        <div className="hidden sm:flex items-center gap-2 flex-shrink-0">
+          {isEditing ? (
+            <>
+              <button
+                onClick={handleSaveEdit}
+                disabled={isUpdating}
+                className="text-sm text-green-600 hover:text-green-700 disabled:opacity-50"
+                aria-label="Save changes"
               >
-                {task.description}
-              </p>
-            )}
-          </div>
-        )}
+                Save
+              </button>
+              <button
+                onClick={handleCancelEdit}
+                disabled={isUpdating}
+                className="text-sm text-gray-600 hover:text-gray-700 disabled:opacity-50"
+                aria-label="Cancel editing"
+              >
+                Cancel
+              </button>
+            </>
+          ) : (
+            <>
+              <button
+                onClick={() => setIsEditing(true)}
+                disabled={isUpdating || isDeleting}
+                className="text-sm text-blue-600 hover:text-blue-700 disabled:opacity-50"
+                aria-label={`Edit "${task.title}"`}
+              >
+                Edit
+              </button>
+              <button
+                onClick={() => setShowDeleteConfirm(true)}
+                disabled={isUpdating || isDeleting}
+                className="text-sm text-red-600 hover:text-red-700 disabled:opacity-50"
+                aria-label={`Delete "${task.title}"`}
+              >
+                Delete
+              </button>
+            </>
+          )}
+        </div>
       </div>
 
-      {/* Actions */}
-      <div className="flex items-center gap-2">
+      {/* Actions - mobile row below content */}
+      <div className="flex sm:hidden items-center gap-3 mt-2 ml-8">
         {isEditing ? (
           <>
             <button
               onClick={handleSaveEdit}
               disabled={isUpdating}
-              className="text-sm text-green-600 hover:text-green-700 disabled:opacity-50"
+              className="text-xs font-medium text-green-600 hover:text-green-700 disabled:opacity-50"
               aria-label="Save changes"
             >
               Save
@@ -154,7 +199,7 @@ export default function TaskItem({ task, onUpdate, onDelete }: TaskItemProps) {
             <button
               onClick={handleCancelEdit}
               disabled={isUpdating}
-              className="text-sm text-gray-600 hover:text-gray-700 disabled:opacity-50"
+              className="text-xs font-medium text-gray-600 hover:text-gray-700 disabled:opacity-50"
               aria-label="Cancel editing"
             >
               Cancel
@@ -165,7 +210,7 @@ export default function TaskItem({ task, onUpdate, onDelete }: TaskItemProps) {
             <button
               onClick={() => setIsEditing(true)}
               disabled={isUpdating || isDeleting}
-              className="text-sm text-blue-600 hover:text-blue-700 disabled:opacity-50"
+              className="text-xs font-medium text-blue-600 hover:text-blue-700 disabled:opacity-50"
               aria-label={`Edit "${task.title}"`}
             >
               Edit
@@ -173,7 +218,7 @@ export default function TaskItem({ task, onUpdate, onDelete }: TaskItemProps) {
             <button
               onClick={() => setShowDeleteConfirm(true)}
               disabled={isUpdating || isDeleting}
-              className="text-sm text-red-600 hover:text-red-700 disabled:opacity-50"
+              className="text-xs font-medium text-red-600 hover:text-red-700 disabled:opacity-50"
               aria-label={`Delete "${task.title}"`}
             >
               Delete
