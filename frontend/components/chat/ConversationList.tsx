@@ -18,7 +18,7 @@ export default function ConversationList({
   loading = false,
 }: ConversationListProps) {
   return (
-    <div className="w-64 bg-gray-900 text-white flex flex-col h-full">
+    <div className="w-64 bg-gray-900 text-white flex flex-col h-screen md:h-full">
       <div className="p-4 border-b border-gray-700">
         <button
           onClick={onNewChat}
