@@ -63,11 +63,13 @@ description: "Task list template for feature implementation"
 Examples of foundational tasks (adjust based on your project):
 
 - [ ] T004 Setup database schema and migrations framework
-- [ ] T005 [P] Implement authentication/authorization framework
+- [ ] T005 [P] Implement authentication/authorization framework with JWT verification
 - [ ] T006 [P] Setup API routing and middleware structure
-- [ ] T007 Create base models/entities that all stories depend on
-- [ ] T008 Configure error handling and logging infrastructure
-- [ ] T009 Setup environment configuration management
+- [ ] T007 Create base models/entities with user_id foreign keys for data isolation
+- [ ] T008 Configure error handling (401, 403, 404, 422, 500) and logging infrastructure
+- [ ] T009 Setup environment configuration management (.env files)
+- [ ] T010 [P] Implement JWT token verification middleware for FastAPI
+- [ ] T011 [P] Setup user data isolation filters at database query level
 
 **Checkpoint**: Foundation ready - user story implementation can now begin in parallel
 

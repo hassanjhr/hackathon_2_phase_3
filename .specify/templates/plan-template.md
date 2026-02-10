@@ -31,7 +31,41 @@
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-[Gates determined based on constitution file]
+**I. Spec-First Development**
+- [ ] Feature has complete spec.md with acceptance criteria, API contracts, and data models
+- [ ] No implementation has begun before spec approval
+
+**II. Security by Default**
+- [ ] All API endpoints will require JWT authentication
+- [ ] JWT verification strategy documented
+- [ ] User identity extraction from JWT (not request body) confirmed
+- [ ] User data isolation strategy defined
+
+**III. User Data Isolation**
+- [ ] Database models include user_id foreign keys where applicable
+- [ ] Query filtering by authenticated user_id documented
+- [ ] No cross-user data access paths identified
+
+**IV. Reproducibility**
+- [ ] Plan references spec.md and will generate tasks.md
+- [ ] Significant architectural decisions identified for ADR documentation
+- [ ] Implementation will be traceable through PHRs
+
+**V. Automation-First**
+- [ ] Appropriate Claude Code agents identified for each domain:
+  - `auth-security-handler` for authentication features
+  - `nextjs-ui-builder` for frontend features
+  - `neon-db-manager` for database design
+  - `fastapi-backend-dev` for backend API
+- [ ] No manual coding planned
+
+**VI. Production Realism**
+- [ ] Using Neon PostgreSQL (not in-memory/SQLite)
+- [ ] Using Better Auth with JWT (not hardcoded users)
+- [ ] Using FastAPI with REST conventions (not mock endpoints)
+- [ ] Using Next.js 16+ App Router (not static HTML)
+- [ ] Proper error handling with HTTP status codes planned
+- [ ] Environment-based configuration (.env) planned
 
 ## Project Structure
 

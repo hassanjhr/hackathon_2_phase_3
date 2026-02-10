@@ -208,3 +208,229 @@ Wait for consent; never auto-create ADRs. Group related decisions (stacks, authe
 
 ## Code Standards
 See `.specify/memory/constitution.md` for code quality, testing, performance, security, and architecture principles.
+
+---
+
+## Project-Specific Context: Todo Full-Stack Web Application
+
+### Project Overview
+**Phase II: Todo Full-Stack Web Application**
+
+Transform a console application into a modern multi-user web application with persistent storage using the Agentic Dev Stack workflow.
+
+**Objective:** Implement all 5 Basic Level features as a web application with RESTful API endpoints, responsive frontend interface, and persistent database storage.
+
+**Development Approach:** Use Spec-Kit Plus workflow:
+1. Write spec → 2. Generate plan → 3. Break into tasks → 4. Implement via Claude Code
+
+**No manual coding allowed.** All development must be done through Claude Code agents.
+
+### Technology Stack
+
+| Layer | Technology |
+|-------|-----------|
+| Frontend | Next.js 16+ (App Router) |
+| Backend | Python FastAPI |
+| ORM | SQLModel |
+| Database | Neon Serverless PostgreSQL |
+| Authentication | Better Auth |
+| Spec-Driven Dev | Claude Code + Spec-Kit Plus |
+
+### Agent Assignment Guidelines
+
+**CRITICAL:** Use specialized agents for their respective domains. Do NOT attempt to implement features outside agent expertise.
+
+#### 1. Authentication & Security → `auth-security-handler`
+**Use this agent for:**
+- User signup/signin implementation
+- Better Auth integration and configuration
+- JWT token generation and validation
+- Password hashing and security
+- Authentication middleware
+- Session management
+- Security vulnerability detection in auth code
+- Password reset flows
+- Email verification
+
+**Example triggers:**
+- "Implement user registration"
+- "Add JWT authentication to API"
+- "Review login security"
+- "Set up Better Auth"
+
+#### 2. Frontend Development → `nextjs-ui-builder`
+**Use this agent for:**
+- Next.js App Router pages and layouts
+- UI components (forms, lists, modals)
+- Responsive design with Tailwind CSS
+- Client-side state management
+- Form validation and error handling
+- Loading states and suspense patterns
+- Navigation and routing
+- Server Components vs Client Components
+- Image optimization
+
+**Example triggers:**
+- "Create todo list page"
+- "Build signup form"
+- "Add responsive navigation"
+- "Implement todo item component"
+
+#### 3. Database Design & Operations → `neon-db-manager`
+**Use this agent for:**
+- Database schema design
+- SQLModel model definitions
+- Database migrations
+- Neon PostgreSQL configuration
+- Query optimization
+- Index strategies
+- N+1 query detection
+- Connection pooling setup
+- Multi-tenant data isolation
+
+**Example triggers:**
+- "Design todo database schema"
+- "Create user and todo models"
+- "Optimize todo queries"
+- "Set up Neon database"
+
+#### 4. Backend API Development → `fastapi-backend-dev`
+**Use this agent for:**
+- FastAPI endpoint implementation
+- Request/response validation with Pydantic
+- API route organization
+- CORS configuration
+- Error handling and status codes
+- Dependency injection
+- Background tasks
+- File uploads
+- API documentation
+- Middleware configuration
+
+**Example triggers:**
+- "Create todo CRUD endpoints"
+- "Add API validation"
+- "Implement error handling"
+- "Set up CORS for Next.js"
+
+### Authentication Flow (Better Auth + JWT)
+
+**How It Works:**
+
+1. **User Login (Frontend → Better Auth)**
+   - User submits credentials on Next.js frontend
+   - Better Auth validates credentials and creates session
+   - Better Auth issues JWT token containing user information
+
+2. **API Request (Frontend → Backend)**
+   - Frontend makes API call to FastAPI backend
+   - Includes JWT token in header: `Authorization: Bearer <token>`
+
+3. **Token Verification (Backend)**
+   - FastAPI receives request and extracts token from header
+   - Backend verifies JWT signature using shared secret key
+   - Backend decodes token to extract user ID, email, etc.
+
+4. **Data Filtering (Backend)**
+   - Backend matches decoded user ID with user ID in request URL/body
+   - Backend filters database queries to return only data belonging to authenticated user
+   - Returns user-specific todos only
+
+**Security Requirements:**
+- Never hardcode JWT secret keys (use `.env`)
+- Validate token signature on every protected endpoint
+- Match user ID from token with user ID in request
+- Implement proper error handling for invalid/expired tokens
+- Use HTTPS in production
+
+### Development Workflow
+
+**For every feature implementation:**
+
+1. **Specification Phase** (`/sp.specify`)
+   - Define feature requirements clearly
+   - Include acceptance criteria
+   - Specify API contracts and data models
+
+2. **Planning Phase** (`/sp.plan`)
+   - Use appropriate agent based on domain:
+     - Auth features → `auth-security-handler`
+     - Frontend features → `nextjs-ui-builder`
+     - Database design → `neon-db-manager`
+     - API endpoints → `fastapi-backend-dev`
+   - Generate architectural plan
+   - Identify dependencies and risks
+
+3. **Task Breakdown** (`/sp.tasks`)
+   - Break plan into testable tasks
+   - Assign tasks to appropriate agents
+   - Define acceptance criteria for each task
+
+4. **Implementation** (`/sp.implement`)
+   - Execute tasks using assigned agents
+   - Follow TDD approach where applicable
+   - Create PHRs for each implementation session
+
+5. **Validation**
+   - Test all endpoints
+   - Verify authentication flow
+   - Check database queries
+   - Validate frontend functionality
+
+### Multi-Agent Coordination
+
+**When features span multiple domains:**
+
+Example: "Implement user todo list feature"
+
+1. **Database** (`neon-db-manager`): Design schema for users and todos
+2. **Backend** (`fastapi-backend-dev`): Create CRUD API endpoints
+3. **Auth** (`auth-security-handler`): Add JWT middleware to protect endpoints
+4. **Frontend** (`nextjs-ui-builder`): Build todo list UI with API integration
+
+**Coordination Strategy:**
+- Start with database schema (foundation)
+- Then backend API (business logic)
+- Then authentication (security layer)
+- Finally frontend (user interface)
+
+### Project Constraints
+
+**Must Follow:**
+- All data must be user-scoped (no cross-user data leaks)
+- All API endpoints must validate JWT tokens
+- All database queries must filter by authenticated user ID
+- All secrets must be in `.env` files
+- All changes must be testable and reversible
+- No manual coding - use Claude Code agents only
+
+**Non-Goals:**
+- Real-time collaboration features
+- Mobile app development
+- Advanced analytics or reporting
+- Third-party integrations (beyond Better Auth)
+
+### Success Criteria
+
+**Technical:**
+- RESTful API with proper HTTP methods and status codes
+- Responsive frontend works on mobile and desktop
+- Database properly normalized and indexed
+- Authentication secure with JWT validation
+- All endpoints protected and user-scoped
+
+**Process:**
+- All features developed through Spec-Kit Plus workflow
+- PHRs created for all implementation sessions
+- ADRs created for significant architectural decisions
+- All code generated by Claude Code agents (no manual coding)
+
+## Active Technologies
+- Neon Serverless PostgreSQL (cloud-hosted, production-grade) (001-todo-fullstack-app)
+- TypeScript/JavaScript with Next.js 16+ (App Router) + Next.js 16+, React 18+, Tailwind CSS (styling), Fetch API (HTTP client) (003-frontend-integration)
+- N/A (frontend consumes backend API, no local data persistence beyond auth tokens) (003-frontend-integration)
+- Python 3.11+ (backend), TypeScript (frontend) + FastAPI, OpenAI Agents SDK (`openai-agents`), SQLModel, Next.js 16+ (004-ai-agent-chat)
+- Neon Serverless PostgreSQL (existing) — new tables: `conversations`, `messages` (004-ai-agent-chat)
+
+## Recent Changes
+- 001-todo-fullstack-app: Added Neon Serverless PostgreSQL (cloud-hosted, production-grade)

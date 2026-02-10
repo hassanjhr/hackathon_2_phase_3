@@ -85,7 +85,7 @@
 ### Functional Requirements
 
 - **FR-001**: System MUST [specific capability, e.g., "allow users to create accounts"]
-- **FR-002**: System MUST [specific capability, e.g., "validate email addresses"]  
+- **FR-002**: System MUST [specific capability, e.g., "validate email addresses"]
 - **FR-003**: Users MUST be able to [key interaction, e.g., "reset their password"]
 - **FR-004**: System MUST [data requirement, e.g., "persist user preferences"]
 - **FR-005**: System MUST [behavior, e.g., "log all security events"]
@@ -94,6 +94,15 @@
 
 - **FR-006**: System MUST authenticate users via [NEEDS CLARIFICATION: auth method not specified - email/password, SSO, OAuth?]
 - **FR-007**: System MUST retain user data for [NEEDS CLARIFICATION: retention period not specified]
+
+### Security Requirements *(mandatory for features with user data or API endpoints)*
+
+- **SR-001**: All API endpoints MUST require valid JWT authentication
+- **SR-002**: User identity MUST be extracted from JWT token, not request body
+- **SR-003**: All database queries MUST filter by authenticated user_id
+- **SR-004**: Unauthorized requests MUST return 401 status code
+- **SR-005**: Authorization failures MUST return 403 status code
+- **SR-006**: [Add feature-specific security requirements]
 
 ### Key Entities *(include if feature involves data)*
 
